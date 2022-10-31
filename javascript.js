@@ -1,72 +1,114 @@
-let screenContent = ''
+// attempt 2 
 
-function updateScreen(){
-    let screen = document.querySelector('.screen');
-    console.log(screen)
-    screen.textContent = screenContent;
+let mainDisplayValue = '';
+let secondaryDisplayValue = '';
+let operator = '';
+let lastOperation = '';
+
+function updateDisplay(){
+    const firstDisplay = document.querySelector('.first-display');
+    const secondDisplay = document.querySelector('.second-display');
+    firstDisplay.textContent = mainDisplayValue;
+    if(lastOperation != ''){
+    firstDisplay.textContent = `${lastOperation} = ${mainDisplayValue}`;}
+    secondDisplay.textContent = secondaryDisplayValue;
 }
 
-const btn = Array.from(document.querySelectorAll('.number, .operator'));
-
-btn.forEach( btn => btn.addEventListener('click',function (e){
-    if(Array.from(screenContent).some(letter => ['*','/','+','-'].includes(letter)) && ['*','/','+','-'].includes(e.target.textContent)){
-        return
-    }
-
-
-    screenContent = screenContent + e.target.textContent;
-    updateScreen();
-}))
-
-updateScreen();
-
-const clear = document.querySelector('.clear')
-console.log(clear)
-clear.addEventListener('click', function clearScreen(e){
-    screenContent = '';
-    updateScreen();
-})
-
-const remove = document.querySelector('.remove')
-console.log(remove)
-remove.addEventListener('click', function(e){
-    screenContent = screenContent.slice(0, -1)
-    console.log(screenContent+'after')
-    updateScreen();
-})
-
-const equals = document.querySelector('.equals');
-console.log('equals is '+equals)
-equals.addEventListener('click', calculate )
-
-function calculate(){
-    const correctOperator = operatorToExecute(screenContent);
-    console.log(correctOperator)
-    if (correctOperator == false){
-        console.log('operator is false')
-        return
-    }
-    numbersToCompare = screenContent.split(/[^0-9.]/);
-
+function operate(number1,number2,operand){
     
-    switch (correctOperator) {
-        case '*':
-            screenContent = Number(numbersToCompare[0])*Number(numbersToCompare[1]);
-            break;
-        case '/':
-            screenContent = Number(numbersToCompare[0])/Number(numbersToCompare[1]);
-            break;
+    number1 = Number(number1);
+    number2 = Number(number2);
+
+    lastOperation = `${number1} ${operand} ${number2}`
+
+    switch (operand) {
         case '+':
-            screenContent = Number(numbersToCompare[0])+Number(numbersToCompare[1]);
+            return (number1+number2).toFixed(2);
             break;
         case '-':
-            screenContent = Number(numbersToCompare[0])-Number(numbersToCompare[1]);
+            return (number1-number2).toFixed(2);
             break;
+        case "/":
+            return (number1/number2).toFixed(2);
+            break;
+        case "*":
+            return (number1*number2).toFixed(2);
+            break;
+        default:
+            lastOperation = '';
+            return 'no operator chosen, please clear calculator'
+        break;
     }
-    updateScreen();
 }
 
-
-function operatorToExecute(expression){
-   return Array.from(expression).find(sign => sign.match(/[^0-9.]/))
+function btnFunction(e){
+    if(secondaryDisplayValue.indexOf('.') != '-1' && e.target.textContent == '.'){
+        return;
+    }
+    secondaryDisplayValue = secondaryDisplayValue + e.target.textContent; 
+    updateDisplay();   
 }
+
+function oprFunction(e){
+    if( mainDisplayValue == ''){
+        mainDisplayValue = secondaryDisplayValue;
+        secondaryDisplayValue = ''
+        updateDisplay()
+    }
+    operator = e.target.textContent;
+
+    if (secondaryDisplayValue != ''){
+        sumFunction()
+    }
+}
+
+function sumFunction(){
+   mainDisplayValue = operate(mainDisplayValue,secondaryDisplayValue,operator);
+   secondaryDisplayValue = '';
+   updateDisplay();
+
+}
+
+function removeFunction(){
+secondaryDisplayValue = secondaryDisplayValue.slice(0,-1);
+updateDisplay()
+}
+
+function clearFunction(){
+    mainDisplayValue = '';
+    secondaryDisplayValue = '';
+    lastOperation = '';
+    operator ='';
+    updateDisplay();
+}
+
+function changeFunction(){
+    if (secondaryDisplayValue[0] == '-'){
+        secondaryDisplayValue = secondaryDisplayValue.slice(1,)
+        updateDisplay()
+    } else {
+    secondaryDisplayValue = '-'+secondaryDisplayValue;
+    updateDisplay()}
+}
+
+const btn = Array.from(document.querySelectorAll('.number'));
+btn.forEach(btn => btn.addEventListener('click', btnFunction))
+
+const opr = Array.from(document.querySelectorAll('.operator'));
+opr.forEach(opr => opr.addEventListener('click', oprFunction))
+
+const sum = Array.from(document.querySelectorAll('.sum'));
+sum.forEach(sum => sum.addEventListener('click', sumFunction))
+
+const remove = Array.from(document.querySelectorAll('.remove'));
+remove.forEach(remove => remove.addEventListener('click', removeFunction))
+
+const clear = Array.from(document.querySelectorAll('.clear'));
+clear.forEach(clear => clear.addEventListener('click', clearFunction))
+
+const change = Array.from(document.querySelectorAll('.change'));
+change.forEach(change => change.addEventListener('click', changeFunction))
+
+
+
+

@@ -1,24 +1,71 @@
+html {
+background-color: bisque;
+}
+
 body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 40px;
+display: flex; 
+justify-content: center;
+align-items: center;
+font-size: larger;
+font-family: retro_computerregular;
 }
 
-.container {
-    display: flex;
-    flex-direction: column;
+.first-display{
     border: 2px solid black;
-    width: 400px;
-    row-gap: 40px;
-    column-gap: 40px;
+    height: 50px;
+    font-size: 32px ;
 }
 
-.screen {
+.second-display{
     border: 2px solid black;
-    align-items: flex-end;
+    height: 40px;
+    font-size: 30px;
+}
+
+.first-display, .second-display{
+    display: flex;
+    justify-content: flex-end;
+    color: #00ff00;
+    background-color: black;
+}
+
+.calculator {
+    border: 3px solid black ;
+    border-radius: 2%;
+    padding: 20px;
+    background-color: grey;
+    width: 500px;
+    margin-top: 200px;
 }
 
 button {
-    font-size: 40px;
+    font-size: 30px;
+    font-family: retro_computerregular;
+}
+
+.keyboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.big-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr;
+}
+
+.special-action {
+    font-size: 25px;
+}
+
+.calculator > * {
+    gap: 19px;
+    padding: 10px 0px;
+}
+
+@font-face {
+    font-family: 'retro_computerregular';
+    src: url('retro_computer_personal_use-webfont.woff2') format('woff2'),
+         url('retro_computer_personal_use-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
 }
